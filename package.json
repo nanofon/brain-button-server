@@ -1,0 +1,30 @@
+{
+  "name": "brain-button-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Server-side for Brain Button application intended to replace physical buttons in amateur Brain Ring games",
+  "main": "server.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nanofon/brain-button-server.git"
+  },
+  "keywords": [
+    "brain",
+    "ring",
+    "button"
+  ],
+  "author": "nanofon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nanofon/brain-button-server/issues"
+  },
+  "homepage": "https://github.com/nanofon/brain-button-server#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1"
+  }
+}
