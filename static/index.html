@@ -2,6 +2,28 @@
 <html>
     <head></head>
     <body>
+        <h1>This is a mock of mobile client</h1>
+        <p>Here we define the interface. Then implement on backend and in mobile client.</p>
+        <h2>Elements to implement</h2>
+        <ul>
+            <li>Connect button: to connect clients to each other</li>
+            <li>Player / Host switch</li>
+            <li>Common elements</li>
+            <ul>
+                <li>List of teams</li>
+            </ul>
+            <li>Player screen</li>
+            <ul>
+                <li>Team name</li>
+                <li>Button</li>
+            </ul>
+            <li>Host screen</li>
+            <ul>
+                <li>Timer button</li>
+                <li>Reset button</li>
+                <li>Settings</li>
+            </ul>
+        </ul>
         <ul id="messages"></ul>
         <input id = "input"><button id="button">Emit</button>
         <script src="/socket.io/socket.io.js"></script>
@@ -11,6 +33,12 @@
             let button = document.getElementById("button");
             let messages = document.getElementById("messages")
             button.addEventListener("click", () => {
+                if(input.value) {
+                    socket.emit("alarma", input.value);
+                    input.value = "";
+                }
+            });
+            input.addEventListener("change", () => {
                 if(input.value) {
                     socket.emit("alarma", input.value);
                     input.value = "";
