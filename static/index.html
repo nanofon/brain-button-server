@@ -7,6 +7,12 @@
         <h2>Elements to implement</h2>
         <ul>
             <li>Connect button: to connect clients to each other</li>
+            <ul>
+                <li>Client id</li>
+                <li>Group id</li>
+                <li>Button should tell server "Client X1 of group G1 wants to connect to client X2 of group G2"</li>
+                <li>Then the server should merge the groups</li>
+            </ul>
             <li>Player / Host switch</li>
             <li>Common elements</li>
             <ul>
@@ -24,10 +30,18 @@
                 <li>Settings</li>
             </ul>
         </ul>
+        <div>
+            <h4>link to be scanned by another client</h4>
+            <input placeholder="link from another client">
+            <button>Connect </button>
+        </div>
         <ul id="messages"></ul>
         <input id = "input"><button id="button">Emit</button>
         <script src="/socket.io/socket.io.js"></script>
         <script>
+            let state = {
+                
+            }
             let socket = io("ws://localhost:3000");
             let input = document.getElementById("input");
             let button = document.getElementById("button");
