@@ -25,6 +25,7 @@
   "homepage": "https://github.com/nanofon/brain-button-server#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "socket.io": "^4.4.1"
+    "socket.io": "^4.4.1",
+    "uuid": "^8.3.2"
   }
 }

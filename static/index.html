@@ -30,22 +30,30 @@
                 <li>Settings</li>
             </ul>
         </ul>
+        
         <div>
-            <h4>link to be scanned by another client</h4>
-            <input placeholder="link from another client">
-            <button>Connect </button>
+            <h4 id='connectLink'></h4>
+            <input id='connectInput' placeholder="link from another client">
         </div>
+
         <ul id="messages"></ul>
         <input id = "input"><button id="button">Emit</button>
+
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            let state = {
-                
-            }
             let socket = io("ws://localhost:3000");
             let input = document.getElementById("input");
             let button = document.getElementById("button");
             let messages = document.getElementById("messages")
+            const connectLink = document.getElementById('connectLink')
+            const connectInput = document.getElementById('connectInput')
+
+            connectInput.addEventListener("change", () => {
+                console.log(`submitted ${connectInput.value}`)
+                socket.emit("join", connectInput.value)
+                connectInput.value = "";
+            })
+            
             button.addEventListener("click", () => {
                 if(input.value) {
                     socket.emit("alarma", input.value);
@@ -58,6 +66,9 @@
                     input.value = "";
                 }
             });
+            socket.on('connect', ()=>{
+                connectLink.innerHTML = socket.id
+            })
             socket.on("no-panic", (msg) => {
                 let item = document.createElement('li')
                 item.textContent = msg
