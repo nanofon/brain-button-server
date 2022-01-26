@@ -6,13 +6,11 @@
         <p>Here we define the interface. Then implement on backend and in mobile client.</p>
         <h2>Elements to implement</h2>
         <ul>
-            <li>Connect button: to connect clients to each other</li>
+            <strike><li>Connect field: to connect clients to each other</li>
             <ul>
-                <li>Client id</li>
-                <li>Group id</li>
-                <li>Button should tell server "Client X1 of group G1 wants to connect to client X2 of group G2"</li>
-                <li>Then the server should merge the groups</li>
+                <li>sends to the server the id of other</li>
             </ul>
+            </strike>
             <li>Player / Host switch</li>
             <li>Common elements</li>
             <ul>
@@ -31,27 +29,29 @@
             </ul>
         </ul>
         
-        <div>
-            <h4 id='connectLink'></h4>
-            <input id='connectInput' placeholder="link from another client">
+        <div id='connection'>
+            <input id='clientId'></h4>
+            <input id='connectInput' placeholder="other's clientId">
+            <input type='radio' id='host' name='host' value=true>
+            <label>Host</label>
+            <input type='radio' id='player' name='host' value=false checked=true>
+            <label>Player</label>
         </div>
-
-        <ul id="messages"></ul>
-        <input id = "input"><button id="button">Emit</button>
+        <ul id='teams'></ul>
+        <div id='controls'></div>
 
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            let socket = io("ws://localhost:3000");
-            let input = document.getElementById("input");
-            let button = document.getElementById("button");
-            let messages = document.getElementById("messages")
-            const connectLink = document.getElementById('connectLink')
+            const clientIdField = document.getElementById('clientId')
+            const socket = io("ws://localhost:3000");
+            const input = document.getElementById("input");
+            const button = document.getElementById("button");
+            const messages = document.getElementById("messages")
             const connectInput = document.getElementById('connectInput')
+            const teamList = document.getElementById('teams')
 
             connectInput.addEventListener("change", () => {
-                console.log(`submitted ${connectInput.value}`)
                 socket.emit("join", connectInput.value)
-                connectInput.value = "";
             })
             
             button.addEventListener("click", () => {
@@ -60,20 +60,22 @@
                     input.value = "";
                 }
             });
-            input.addEventListener("change", () => {
-                if(input.value) {
-                    socket.emit("alarma", input.value);
-                    input.value = "";
+
+            socket.on("connect", () => {
+                if(clientIdField.value) {
+                    socket.emit('clientId', clientIdField.value)
                 }
-            });
-            socket.on('connect', ()=>{
-                connectLink.innerHTML = socket.id
             })
-            socket.on("no-panic", (msg) => {
-                let item = document.createElement('li')
-                item.textContent = msg
-                messages.appendChild(item)
-            });
+
+            socket.on('room update', (msg) => {
+                teamList.innerHTML=JSON.parse(msg).map(item => {return '<li id="'+item+'">'+item+'</li>'})
+            })
+
+            clientIdField.addEventListener("change", () => {
+                if(clientIdField.value) {
+                    socket.emit('clientId', clientIdField.value)
+                }
+            })
         </script>
     </body>
 </html>
