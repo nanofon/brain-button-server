@@ -53,22 +53,18 @@
             connectInput.addEventListener("change", () => {
                 socket.emit("join", connectInput.value)
             })
-            
-            button.addEventListener("click", () => {
-                if(input.value) {
-                    socket.emit("alarma", input.value);
-                    input.value = "";
-                }
-            });
+
+            socket.on('room update', (msg) => {
+                teamList.innerHTML=JSON.parse(msg).map(item => {
+                    const status = item.connected ? ' | online' : ' | offline'
+                    return '<li id="'+item.clientId+'">'+item.clientId + status + '</li>'
+                })
+            })
 
             socket.on("connect", () => {
                 if(clientIdField.value) {
                     socket.emit('clientId', clientIdField.value)
                 }
-            })
-
-            socket.on('room update', (msg) => {
-                teamList.innerHTML=JSON.parse(msg).map(item => {return '<li id="'+item+'">'+item+'</li>'})
             })
 
             clientIdField.addEventListener("change", () => {
