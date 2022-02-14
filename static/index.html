@@ -2,43 +2,63 @@
 <html>
     <head></head>
     <body>
-        <h1>This is a mock of mobile client</h1>
-        <p>Here we define the interface. Then implement on backend and in mobile client.</p>
-        <h2>Elements to implement</h2>
-        <ul>
-            <strike><li>Connect field: to connect clients to each other</li>
-            <ul>
-                <li>sends to the server the id of other</li>
-            </ul>
-            </strike>
-            <li>Player / Host switch</li>
-            <li>Common elements</li>
-            <ul>
-                <li>List of teams</li>
-            </ul>
-            <li>Player screen</li>
-            <ul>
-                <li>Team name</li>
-                <li>Button</li>
-            </ul>
-            <li>Host screen</li>
-            <ul>
-                <li>Timer button</li>
-                <li>Reset button</li>
-                <li>Settings</li>
-            </ul>
-        </ul>
-        
-        <div id='connection'>
-            <input id='clientId'></h4>
-            <input id='connectInput' placeholder="other's clientId">
-            <input type='radio' id='host' name='host' value=true>
-            <label>Host</label>
-            <input type='radio' id='player' name='host' value=false checked=true>
-            <label>Player</label>
+        <div>
+            <h1>This is a mock of mobile client</h1>
+            <p>Here we define the interface. Then implement on backend and in mobile client.</p>
+            <h2>Elements to implement</h2>
         </div>
-        <ul id='teams'></ul>
-        <div id='controls'></div>
+        <div  style="display: flex; flex-direction: row;">
+            <div>
+                <ul>
+                    <strike><li>Connect field: to connect clients to each other</li>
+                    <ul>
+                        <li>sends to the server the id of other</li>
+                    </ul>
+                    <li>Common elements</li>
+                    <ul>
+                        <li>List of teams</li>
+                    </ul></strike>
+                    <li>Player / Host switch</li>
+                    <ol>
+                        <li>Client ticks Host checkbox -> message is sent to the server</li>
+                        <li>Server sends to the room "Are you the host?" -> clients respond yes/no</li>
+                        <ul>
+                            <li>Yes</li>
+                            <ol>
+                                <li>Cliet who sent yes handles the choice</li>
+                                <li>Server says wait for confirmation</li>
+                                <li>Once confirmed the roles change</li>
+                            </ol>
+                            <li>No</li>
+                            <ol>
+                                <li>Client counts responses and once full -> confirms</li>
+                            </ol>
+                        </ul>
+                    </ol>
+                    <li>Host selection</li>
+                    <li>Player screen</li>
+                    <ul>
+                        <li>Team name</li>
+                        <li>Button</li>
+                    </ul>
+                    <li>Host screen</li>
+                    <ul>
+                        <li>Timer button</li>
+                        <li>Reset button</li>
+                        <li>Settings</li>
+                    </ul>
+                </ul>
+            </div>
+            <div>
+                <div id='connection'>
+                    <input id='clientId' placeholder="Own clientId"></h4>
+                    <input id='connectInput' placeholder="other's clientId">
+                    <input type='checkbox' id='host'>
+                    <label>Host</label>
+                </div>
+                <ul id='teams'></ul>
+                <div id='controls'></div>
+            </div>
 
         <script src="/socket.io/socket.io.js"></script>
         <script>
@@ -49,16 +69,18 @@
             const messages = document.getElementById("messages")
             const connectInput = document.getElementById('connectInput')
             const teamList = document.getElementById('teams')
+            const hostSwitch = document.getElementById('host')
 
             connectInput.addEventListener("change", () => {
                 socket.emit("join", connectInput.value)
             })
 
             socket.on('room update', (msg) => {
-                teamList.innerHTML=JSON.parse(msg).map(item => {
-                    const status = item.connected ? ' | online' : ' | offline'
-                    return '<li id="'+item.clientId+'">'+item.clientId + status + '</li>'
-                })
+                teamList.innerHTML=JSON.parse(msg).map(
+                    item => {
+                        const status = item.connected ? ' | online' : ' | offline'
+                        return '<li id="'+item.id+'">'+item.id + status + '</li>'
+                }).join('\n')
             })
 
             socket.on("connect", () => {
@@ -71,6 +93,10 @@
                 if(clientIdField.value) {
                     socket.emit('clientId', clientIdField.value)
                 }
+            })
+
+            hostSwitch.addEventListener("change", () =>{
+                console.log(hostSwitch.checked)
             })
         </script>
     </body>

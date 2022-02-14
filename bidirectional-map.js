@@ -21,3 +21,4 @@ export class BiMap {
         delete this.reverseData[other] | this.data[other]
     }
 }
+
