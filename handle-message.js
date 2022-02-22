@@ -1,8 +1,9 @@
-export default function (io, event, data) {
+export default function (io, event, message) {
+    const data = JSON.parse(message)
     switch(event){
         case 'room update':
-            Object.entries(data).forEach((id, socketId) => {
-                io.to(socketId).emit('room update', data)
+            Object.values(data).forEach(socketId => {
+                io.to(socketId).emit('room update', message)
             })
             break;
         default:

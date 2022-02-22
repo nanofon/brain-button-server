@@ -14,15 +14,14 @@ export default class ClientApp{
         this.socket.on('connect', () => {
             this.teamIds[this.id] = this.socket.id;
         });
+
         this.socket.on('room update', (teamIds) => {
-            this.teamIds = teamIds
+            this.teamIds = JSON.parse(teamIds)
         })
     }
 
-    disconnect(){this.socket.close()}
-
     join(otherTeamIds){
         const teamIds = Object.assign(this.teamIds, otherTeamIds)
-        this.socket.emit("room update", teamIds)
+        this.socket.emit("room update", JSON.stringify(teamIds))
     }
 }
