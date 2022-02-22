@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --coverage",
-    "start": "node server.js"
+    "start": "node backend.js"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,14 @@
   },
   "homepage": "https://github.com/nanofon/brain-button-server#readme",
   "dependencies": {
+    "@babel/runtime": "^7.17.2",
     "express": "^4.17.2",
     "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "babel-jest": "^27.4.6",
     "jest": "^27.4.7"

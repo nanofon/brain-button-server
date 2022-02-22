@@ -28,25 +28,20 @@ export class RoomManager{
     inform(room){
         this.io.to(room).emit(
             'room update',
-            JSON.stringify(Array.from(this.clients.byRoom(room)).map(client => client.repr()))
+            JSON.stringify(
+                Array.from(
+                    this.clients.byRoom(room)
+                ).map(
+                    client => client.repr()
+                )
+            )
         )
     }
-}
 
-// object sent to the clients
-/*
-const state = {
-    roomId:"roomId",
-    clients:{
-        "0":{
-            clietnId:"teamId",
-            clientName:"clientName",
-            online:true,
-            ishost:false,
-            requestedHost:false,
-            winState:"win" // falstart / ready
-        },
-        "1":{}
-    } 
+    onDisconnect(socket){
+        const room = this.clients.bySocketId(socket.id).room
+        if(room){
+            this.inform(room)
+        }
+    }
 }
-*/

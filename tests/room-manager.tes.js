@@ -1,5 +1,5 @@
-import { RoomManager } from '../room-manager.js'
-import { Client } from '../client.js'
+import { RoomManager } from '../obsolete/room-manager.js'
+import { Client } from '../obsolete/client.js'
 
 const mockClient = (clientId, socketId) => {
     return new Client(clientId, {
@@ -22,6 +22,7 @@ describe('Room Manager', ()=>{
         let client = mockClient("anyClientId", "anySocketId")
         rm.onClientId(client.socket, client.id)
         expect(rm.clients.byId(client.id)).toEqual(client)
+        expect(rm.clients.byId(client.id).socket.id).toEqual(client.socket.id)
     });
 
     it('on join request joins and informs', () => {
@@ -36,6 +37,13 @@ describe('Room Manager', ()=>{
         rm.onClientId(client3.socket, client3.id)
         rm.join(client3.socket, client2.id)
         expect(rm.inform).toHaveBeenCalledTimes(2)
+    });
+
+    it('accepts host request if no other host in the room', () => {
+        let client1 = mockClient("1", "10")
+        rm.onClientId(client1.socket, client1.id)
+        rm.onHostRequest(client1.socket.id)
+        expect(rm.clients.host())
     });
 
 })
