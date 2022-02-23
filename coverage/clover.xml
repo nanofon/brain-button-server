@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1645526208896" clover="3.2.0">
-  <project timestamp="1645526208896" name="All files">
-    <metrics statements="23" coveredstatements="22" conditionals="3" coveredconditionals="1" methods="8" coveredmethods="8" elements="34" coveredelements="31" complexity="0" loc="23" ncloc="23" packages="1" files="3" classes="3"/>
+<coverage generated="1645620931051" clover="3.2.0">
+  <project timestamp="1645620931051" name="All files">
+    <metrics statements="33" coveredstatements="33" conditionals="3" coveredconditionals="2" methods="16" coveredmethods="16" elements="52" coveredelements="51" complexity="0" loc="33" ncloc="33" packages="1" files="2" classes="2"/>
     <file name="client-app.js" path="C:\Users\dsarnachev\code\brain-button-server\client-app.js">
-      <metrics statements="11" coveredstatements="11" conditionals="1" coveredconditionals="0" methods="4" coveredmethods="4"/>
-      <line num="7" count="5" type="stmt"/>
-      <line num="8" count="5" type="stmt"/>
-      <line num="9" count="5" type="stmt"/>
-      <line num="10" count="5" type="stmt"/>
-      <line num="12" count="5" type="stmt"/>
-      <line num="14" count="5" type="stmt"/>
-      <line num="15" count="4" type="stmt"/>
-      <line num="18" count="5" type="stmt"/>
-      <line num="19" count="2" type="stmt"/>
-      <line num="24" count="1" type="stmt"/>
-      <line num="25" count="1" type="stmt"/>
-    </file>
-    <file name="handle-message.js" path="C:\Users\dsarnachev\code\brain-button-server\handle-message.js">
-      <metrics statements="6" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
-      <line num="2" count="1" type="stmt"/>
-      <line num="3" count="1" type="cond" truecount="1" falsecount="1"/>
-      <line num="5" count="1" type="stmt"/>
-      <line num="6" count="2" type="stmt"/>
-      <line num="8" count="1" type="stmt"/>
-      <line num="10" count="0" type="stmt"/>
+      <metrics statements="26" coveredstatements="26" conditionals="3" coveredconditionals="2" methods="13" coveredmethods="13"/>
+      <line num="8" count="9" type="stmt"/>
+      <line num="9" count="9" type="stmt"/>
+      <line num="11" count="9" type="stmt"/>
+      <line num="12" count="9" type="stmt"/>
+      <line num="17" count="9" type="stmt"/>
+      <line num="18" count="8" type="stmt"/>
+      <line num="21" count="9" type="stmt"/>
+      <line num="22" count="8" type="stmt"/>
+      <line num="23" count="14" type="stmt"/>
+      <line num="29" count="6" type="stmt"/>
+      <line num="32" count="6" type="stmt"/>
+      <line num="37" count="8" type="stmt"/>
+      <line num="41" count="31" type="cond" truecount="2" falsecount="0"/>
+      <line num="42" count="31" type="stmt"/>
+      <line num="43" count="40" type="stmt"/>
+      <line num="48" count="3" type="stmt"/>
+      <line num="49" count="3" type="stmt"/>
+      <line num="50" count="6" type="stmt"/>
+      <line num="51" count="3" type="stmt"/>
+      <line num="52" count="3" type="stmt"/>
+      <line num="56" count="1" type="stmt"/>
+      <line num="57" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="59" count="1" type="stmt"/>
+      <line num="60" count="1" type="stmt"/>
+      <line num="64" count="1" type="stmt"/>
     </file>
     <file name="server.js" path="C:\Users\dsarnachev\code\brain-button-server\server.js">
-      <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <line num="7" count="1" type="stmt"/>
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
       <line num="9" count="1" type="stmt"/>
-      <line num="10" count="1" type="stmt"/>
-      <line num="12" count="1" type="stmt"/>
-      <line num="13" count="4" type="stmt"/>
-      <line num="14" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+      <line num="13" count="8" type="stmt"/>
+      <line num="14" count="4" type="stmt"/>
+      <line num="15" count="8" type="stmt"/>
     </file>
   </project>
 </coverage>

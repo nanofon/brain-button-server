@@ -26,6 +26,7 @@
   "dependencies": {
     "@babel/runtime": "^7.17.2",
     "express": "^4.17.2",
+    "lz-string": "^1.4.4",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "uuid": "^8.3.2"
