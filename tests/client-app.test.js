@@ -92,9 +92,11 @@ describe('Client app', () => {
         setTimeout(()=>{
             client1.join(client2.qrIdSocketId)
             setTimeout(() => {
-                client1.inform(['name']);
+                client1.inform(['name', 'status', 'socketId']);
                 setTimeout(() => {
                     expect(client2.teams[client1.id].name).toEqual(client1.teams[client1.id].name);
+                    expect(client2.teams[client1.id].status).toEqual(client1.teams[client1.id].status);
+                    expect(client2.teams[client1.id].socketId).toEqual(client1.teams[client1.id].socketId);
                     client1.socket.disconnect()
                     client2.socket.disconnect()
                     done();
