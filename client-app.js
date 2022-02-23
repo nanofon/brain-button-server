@@ -11,7 +11,7 @@ export default class ClientApp{
         this.teams = {};
         this.updateTeamValue(this.id, {
             'name':uuidv4(),
-            'status':1
+            'status':'buttonInactive'
         });
         
         this.socket.on('connect', () => {
@@ -38,10 +38,12 @@ export default class ClientApp{
     }
 
     updateTeamValue(id, mapping){
-        if(!(id in this.teams)){this.teams[id] = {}}
+        let newTeam = !(id in this.teams) 
+        if(newTeam){this.teams[id] = {};}
         for (const [key, value] of Object.entries(mapping)){
             this.teams[id][key] = value;
         }
+        if(newTeam){this.inform(Object.keys(this.teams[this.id]))}
     }
 
     join(qrIdSocketId){
@@ -62,6 +64,10 @@ export default class ClientApp{
             "data":data         //{id:{name:string, socketId:string, ...}}
         }
         this.socket.emit('teams update', message)
+    }
+
+    claimHost(){
+
     }
 }
 

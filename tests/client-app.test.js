@@ -1,107 +1,99 @@
 import ClientApp from '../client-app.js'
 import server from '../server.js'
-const TIMEOUT = 100
+const TIMEOUT = 65
+
+let clients = []
+
+const joinAllClients = () => {
+    clients.slice(1,).forEach(client => {
+        client.join(clients[0].qrIdSocketId);
+    });
+};
 
 describe('Client app', () => {
     
     beforeAll((done) => {
         server.listen(3000);
-        done();
-    })
+        setTimeout(done, TIMEOUT);
+    });
 
     afterAll((done) => {
         server.close(0);
-        done();
-    })
+        setTimeout(done, TIMEOUT);
+    });
+
+    beforeEach((done) => {
+        for(let i=0; i<2; i++){
+            clients.push(new ClientApp('test'));
+        }
+        clients.forEach(client => client.socket.connect());
+        setTimeout(done, TIMEOUT);
+    });
+
+    afterEach((done) => {
+        clients.forEach(client => client.socket.disconnect());
+        clients.length = 0;
+        setTimeout(done, TIMEOUT);
+    });
 
     it('initializes with itself in teams[]', () => {
-        let client = new ClientApp('test')
-        expect(client).toHaveProperty('id')
+        expect(clients[0]).toHaveProperty('id');
     });
 
     it('connects, disconnects', (done) => {
-        let client = new ClientApp('test')
-        client.socket.on('connect', () => {
-            expect(client.socket.connected).toBe(true)
-            client.socket.disconnect()
-        })
-        client.socket.on('disconnect', () => {
-            expect(client.socket.connected).toBe(false)
-            done()
-        })
-        client.socket.connect()
+        expect(clients[0].socket.connected).toBe(true);
+        clients[0].socket.on('disconnect', () => {
+            expect(clients[0].socket.connected).toBe(false);
+            done();
+        });
+        clients[0].socket.disconnect();
     });
 
-    it('adds its socketId to teams on connect', (done) => {
-        let client = new ClientApp('test')
-        client.socket.on('connect', () => {
-            expect(client.teams[client.id]).toHaveProperty('socketId')
-            expect(client.teams[client.id].socketId).toEqual(client.socket.id)
-            client.socket.disconnect()
-            done()
-        })
-        client.socket.connect()
+    it('adds its socketId to teams on connect', () => {
+        expect(clients[0].teams[clients[0].id]).toHaveProperty('socketId');
+        expect(clients[0].teams[clients[0].id].socketId).toEqual(clients[0].socket.id);
     });
 
     it('joins another client', (done) => {
-        let client1 = new ClientApp('test');
-        let client2 = new ClientApp('test');
-        client1.socket.connect()
-        client2.socket.connect()
+        expect(clients[0].teams).not.toHaveProperty(clients[1].id)
+        expect(clients[1].teams).not.toHaveProperty(clients[0].id)
+        clients[0].join(clients[1].qrIdSocketId);
         setTimeout(() => {
-            expect(client1.teams).not.toHaveProperty(client2.id)
-            expect(client2.teams).not.toHaveProperty(client1.id)
-            client1.join(client2.qrIdSocketId);
+            expect(clients[0].teams).toHaveProperty(clients[1].id)
+            expect(clients[1].teams).toHaveProperty(clients[0].id)
+            expect(clients[0].teams[clients[1].id].socketId).toEqual(clients[1].socket.id)
+            expect(clients[1].teams[clients[0].id].socketId).toEqual(clients[0].socket.id)
+            done()
+        }, TIMEOUT)
+    }, Math.max(2*TIMEOUT, 5000));
+
+    it('knows roommates, remembers when they disconnected', (done) => {
+        joinAllClients()
+        setTimeout(() => {
+            expect(clients[0].roomSockets).toContain(clients[1].socket.id);
+            expect(clients[1].roomSockets).toContain(clients[0].socket.id);
+            clients[1].socket.disconnect()
             setTimeout(() => {
-                expect(client1.teams).toHaveProperty(client2.id)
-                expect(client2.teams).toHaveProperty(client1.id)
-                expect(client1.teams[client2.id].socketId).toEqual(client2.socket.id)
-                expect(client1.teams[client1.id].socketId).toEqual(client1.socket.id)
-                client1.socket.disconnect()
-                client2.socket.disconnect()
-                done()
+                expect(clients[0].roomSockets.length).toBe(2);
+                done();
             }, TIMEOUT)
         }, TIMEOUT)
     }, Math.max(3*TIMEOUT, 5000));
 
-    it('knows roommates, remembres when they disconnected', (done) => {
-        let client1 = new ClientApp('test');
-        let client2 = new ClientApp('test');
-        client1.socket.connect()
-        client2.socket.connect()
-        setTimeout(() => {
-            client1.join(client2.qrIdSocketId);
-            setTimeout(() => {
-                expect(client1.roomSockets).toContain(client2.socket.id)
-                expect(client2.roomSockets).toContain(client1.socket.id)
-                client2.socket.disconnect()
-                setTimeout(() => {
-                    expect(client1.roomSockets.length).toBe(2);
-                    client1.socket.disconnect()
-                    done();
-                }, TIMEOUT)
-            }, TIMEOUT)
-        }, TIMEOUT)
-    }, Math.max(4*TIMEOUT, 5000));
-
     it('informs room about name, status, socketId', (done) => {
-        let client1 = new ClientApp('test');
-        let client2 = new ClientApp('test');
-        client1.socket.connect()
-        client2.socket.connect()
-        setTimeout(()=>{
-            client1.join(client2.qrIdSocketId)
-            setTimeout(() => {
-                client1.inform(['name', 'status', 'socketId']);
-                setTimeout(() => {
-                    expect(client2.teams[client1.id].name).toEqual(client1.teams[client1.id].name);
-                    expect(client2.teams[client1.id].status).toEqual(client1.teams[client1.id].status);
-                    expect(client2.teams[client1.id].socketId).toEqual(client1.teams[client1.id].socketId);
-                    client1.socket.disconnect()
-                    client2.socket.disconnect()
-                    done();
-                }, TIMEOUT);
-            }, TIMEOUT);
+        joinAllClients()
+        setTimeout(() => {
+            expect(clients[1].teams[clients[0].id].name).toEqual(clients[0].teams[clients[0].id].name);
+            expect(clients[1].teams[clients[0].id].status).toEqual(clients[0].teams[clients[0].id].status);
+            expect(clients[1].teams[clients[0].id].socketId).toEqual(clients[0].teams[clients[0].id].socketId);
+            done();
         }, TIMEOUT);
-    }, Math.max(4*TIMEOUT, 5000));
+    }, Math.max(3*TIMEOUT, 5000));
+
+    it('becomes host if nobody else is', (done) => {
+        joinAllClients();
+        setTimeout(()=>{
+            client[0].claimHost()
+        }, TIMEOUT);
+    });
 });
