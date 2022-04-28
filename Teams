@@ -1,0 +1,36 @@
+    Name    |   Id  |   Socket  |   PlayingStatus   |   Delete  
+    Team A  |   123 |   s1      |   Host            |   x
+    Team B  |   234 |   s2      |   Won             |   x
+    Team C  |   345 |   s3      |   Falstart        |   x
+    Team D  |   456 |   s4      |   Late            |   x
+
+team = {
+    id: string,
+    socket: {
+        id:string,
+        connected:boolean
+    },
+    name: string,
+    status: numbers
+}
+
+Normalize to avoid refreshing all together
+
+1. Ordered mapping of team IDs and socketIds: team[]
+2. For each ID gets team object
+
+Add team by id
+Update teamx.fieldy
+
+{
+    id:socketid
+}
+
+teams = {
+    id:{
+        'name':string,
+        'status':int,
+        'online':boolean
+    },
+    ...
+}
